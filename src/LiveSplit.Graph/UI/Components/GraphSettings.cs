@@ -1,10 +1,11 @@
-﻿using LiveSplit.Model;
-using LiveSplit.Model.Comparisons;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+
+using LiveSplit.Model;
+using LiveSplit.Model.Comparisons;
 
 namespace LiveSplit.UI.Components
 {
@@ -36,7 +37,7 @@ namespace LiveSplit.UI.Components
         public string Comparison { get; set; }
         public LiveSplitState CurrentState { get; set; }
 
-        public GraphSettings ()
+        public GraphSettings()
         {
             InitializeComponent();
             GraphHeight = 120;
@@ -76,15 +77,17 @@ namespace LiveSplit.UI.Components
             cmbComparison.DataBindings.Add("SelectedItem", this, "Comparison", false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
-        void chkShowBestSegments_CheckedChanged(object sender, EventArgs e)
+        private void chkShowBestSegments_CheckedChanged(object sender, EventArgs e)
         {
             btnBestSegmentColor.Enabled = lblBestSegmentColor.Enabled = chkShowBestSegments.Checked;
         }
-        void cmbComparison_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void cmbComparison_SelectedIndexChanged(object sender, EventArgs e)
         {
             Comparison = cmbComparison.SelectedItem.ToString();
         }
-        void GraphSettings_Load(object sender, EventArgs e)
+
+        private void GraphSettings_Load(object sender, EventArgs e)
         {
             chkShowBestSegments_CheckedChanged(null, null);
 
@@ -92,7 +95,10 @@ namespace LiveSplit.UI.Components
             cmbComparison.Items.Add("Current Comparison");
             cmbComparison.Items.AddRange(CurrentState.Run.Comparisons.Where(x => x != BestSplitTimesComparisonGenerator.ComparisonName && x != NoneComparisonGenerator.ComparisonName).ToArray());
             if (!cmbComparison.Items.Contains(Comparison))
+            {
                 cmbComparison.Items.Add(Comparison);
+            }
+
             if (Mode == LayoutMode.Vertical)
             {
                 trkHeight.DataBindings.Clear();
@@ -109,7 +115,7 @@ namespace LiveSplit.UI.Components
             }
         }
 
-        public void SetSettings (XmlNode node)
+        public void SetSettings(XmlNode node)
         {
             var element = (XmlElement)node;
             Version version = SettingsHelper.ParseVersion(element["Version"]);

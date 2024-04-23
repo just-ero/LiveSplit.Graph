@@ -1,6 +1,7 @@
-﻿using LiveSplit.Model;
+﻿using System;
+
+using LiveSplit.Model;
 using LiveSplit.UI.Components;
-using System;
 
 [assembly: ComponentFactory(typeof(GraphFactory))]
 
@@ -14,7 +15,10 @@ namespace LiveSplit.UI.Components
 
         public ComponentCategory Category => ComponentCategory.Media;
 
-        public IComponent Create(LiveSplitState state) => new GraphCompositeComponent(state);
+        public IComponent Create(LiveSplitState state)
+        {
+            return new GraphCompositeComponent(state);
+        }
 
         public string UpdateName => ComponentName;
 

@@ -1,9 +1,10 @@
-﻿using LiveSplit.Model;
-using LiveSplit.Model.Comparisons;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+
+using LiveSplit.Model;
+using LiveSplit.Model.Comparisons;
 
 namespace LiveSplit.UI.Components
 {
@@ -26,15 +27,17 @@ namespace LiveSplit.UI.Components
                 CurrentState = state
             };
             InternalComponent = new ComponentRendererComponent();
-            var components = new List<IComponent>();
-            components.Add(new GraphSeparatorComponent(Settings) { LockToBottom = true });
-            components.Add(new GraphComponent(Settings));
-            components.Add(new GraphSeparatorComponent(Settings) { LockToBottom = false });
+            var components = new List<IComponent>
+            {
+                new GraphSeparatorComponent(Settings) { LockToBottom = true },
+                new GraphComponent(Settings),
+                new GraphSeparatorComponent(Settings) { LockToBottom = false }
+            };
             InternalComponent.VisibleComponents = components;
             state.ComparisonRenamed += state_ComparisonRenamed;
         }
 
-        void state_ComparisonRenamed(object sender, EventArgs e)
+        private void state_ComparisonRenamed(object sender, EventArgs e)
         {
             var args = (RenameEventArgs)e;
             if (Settings.Comparison == args.OldName)
@@ -61,8 +64,8 @@ namespace LiveSplit.UI.Components
         }
 
         public string ComponentName
-            => "Graph" + (Settings.Comparison == "Current Comparison" 
-                ? "" 
+            => "Graph" + (Settings.Comparison == "Current Comparison"
+                ? ""
                 : " (" + CompositeComparisons.GetShortComparisonName(Settings.Comparison) + ")");
 
         public float HorizontalWidth => InternalComponent.HorizontalWidth;
@@ -86,13 +89,18 @@ namespace LiveSplit.UI.Components
         public void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
         {
             if (invalidator != null)
+            {
                 InternalComponent.Update(invalidator, state, width, height, mode);
+            }
         }
 
         public void Dispose()
         {
         }
 
-        public int GetSettingsHashCode() => Settings.GetSettingsHashCode();
+        public int GetSettingsHashCode()
+        {
+            return Settings.GetSettingsHashCode();
+        }
     }
 }
